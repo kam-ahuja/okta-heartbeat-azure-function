@@ -14,15 +14,21 @@ namespace oktaheartbeat
             log.Info($"C# Timer trigger function executed at: {DateTime.Now}");
 
             var tenant = "https://org.oktapreview.com";
-            var username = "john.doe";
-            var password = "Hello#World!";
+            var username = "username";
+            var password = "password";
 
+            try
+            {
+                var oktaClient = new OktaClient("", new Uri(tenant));
+                var authClient = oktaClient.GetAuthClient();
+                var response = authClient.Authenticate(username, password);
 
-            var oktaClient = new OktaClient("", new Uri(tenant));
-            var authClient = oktaClient.GetAuthClient();
-            var response = authClient.Authenticate(username, password);
-
-            log.Info(response.Status);
+                log.Info("Response: " + response.Status);
+            }
+            catch (Exception ex)
+            {
+                log.Error("Error occured: " + ex.Message);
+            }
         }
     }
 }
